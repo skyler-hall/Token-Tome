@@ -4,7 +4,7 @@
 
 Language models don't read letters. They read numbered pieces of words called **tokens**. Token Tome lists all 128,256 tokens in Meta's Llama 3 vocabulary (used by Llama 3, 3.1, and 3.2) in a classic dictionary style.
 
-**Live site:** https://skyler-hall.github.io/token-tome/
+**Live site:** https://tokentome.netlify.app
 
 ---
 
