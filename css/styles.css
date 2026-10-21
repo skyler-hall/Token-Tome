@@ -1,0 +1,616 @@
+/* ==================================================================
+   Token Tome styles
+   ------------------------------------------------------------------
+   1.  Theme colors (light and dark)
+   2.  Base and page layout
+   3.  Header: title, tabs, definitions
+   4.  Toolbar: sort, search, random
+   5.  Intro and feature cards (word of the day, sentence splitter)
+   6.  Entry card (the big word view)
+   7.  Word list
+   8.  Pager
+   9.  Letter index (sidebar on desktop, row on phones)
+   10. Tab views: game, fun facts, saved words
+   11. Footer
+   12. Accessibility helpers
+   13. Phone and small screen adjustments
+   ================================================================== */
+
+
+/* 1. Theme colors -------------------------------------------------
+   Every color on the site comes from these variables. To change the
+   look, edit them here. The dark set is used automatically when the
+   visitor's device is in dark mode. */
+:root {
+  --paper: #f4f6f9;       /* page background */
+  --ink: #18213a;         /* main text */
+  --muted: #5b6478;       /* secondary text */
+  --rule: #d5dae3;        /* lines and borders */
+  --accent: #1f7a70;      /* teal highlight */
+  --tab: #e3e8ef;         /* light button fill */
+  --tab-on: #18213a;      /* selected button fill */
+  --tab-on-text: #f4f6f9; /* text on selected buttons */
+  --chip-a: #d8eeea;      /* token blocks, alternating */
+  --chip-b: #e3e8ef;
+
+  --font-serif: "Libre Caslon Text", Georgia, "Times New Roman", serif;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  color-scheme: light;
+  box-sizing: border-box;
+  /* keep content clear of phone notches and home bars */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10151f;
+    --ink: #e6eaf2;
+    --muted: #9aa3b5;
+    --rule: #263042;
+    --accent: #5cc2b3;
+    --tab: #1a2230;
+    --tab-on: #e6eaf2;
+    --tab-on-text: #10151f;
+    --chip-a: #173a37;
+    --chip-b: #222b3b;
+    color-scheme: dark;
+  }
+}
+
+/* Lets a future theme switch force dark mode with <html data-theme="dark"> */
+:root[data-theme="dark"] {
+  --paper: #10151f;
+  --ink: #e6eaf2;
+  --muted: #9aa3b5;
+  --rule: #263042;
+  --accent: #5cc2b3;
+  --tab: #1a2230;
+  --tab-on: #e6eaf2;
+  --tab-on-text: #10151f;
+  --chip-a: #173a37;
+  --chip-b: #222b3b;
+  color-scheme: dark;
+}
+
+
+/* 2. Base and page layout -----------------------------------------
+   The page is a 2-column grid: content on the left, the letter
+   index on the right. The header and footer span the content. */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 56px;
+  gap: 24px;
+}
+
+.site-header { grid-column: 1 / -1; }
+
+button { font: inherit; color: inherit; }
+
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Shared small buttons (entry actions, random word, etc.) */
+.btn {
+  font-size: 14px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 8px 14px;
+  min-height: 40px;
+  cursor: pointer;
+}
+.btn--strong { border-color: var(--ink); }
+
+/* Shared small gray text */
+.note { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+
+
+/* 3. Header -------------------------------------------------------- */
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.site-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(40px, 7vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* Tabs: Dictionary, Play, Fun facts, Saved */
+.tabs {
+  display: flex;
+  gap: 4px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 4px;
+}
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  border-radius: 7px;
+  padding: 8px 12px;
+  min-height: 40px;
+  cursor: pointer;
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-current="page"],
+.tab[aria-current="page"]:hover { background: var(--tab-on); color: var(--tab-on-text); }
+
+/* The three dictionary-style definitions under the title */
+.definition {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+.definition:first-child { margin-top: 14px; }
+.definition b { color: var(--ink); }
+.definition i { color: var(--ink); }
+.definition--main b { color: var(--accent); }
+
+
+/* 4. Toolbar ------------------------------------------------------- */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 20px 0 0;
+  padding: 14px 0;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+}
+
+.sort-toggle {
+  display: inline-flex;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.sort-toggle button {
+  font-size: 14px;
+  background: transparent;
+  border: 0;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+.sort-toggle button[aria-pressed="true"] { background: var(--tab-on); color: var(--tab-on-text); }
+
+input[type="search"] {
+  font: inherit;
+  font-size: 15px;
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+}
+input[type="search"]::placeholder { color: var(--muted); }
+
+.entry-count { font-size: 14px; color: var(--muted); margin-left: auto; }
+
+
+/* 5. Intro and feature cards -------------------------------------- */
+.intro { max-width: 62ch; margin: 14px 0 0; color: var(--muted); }
+
+.feature-cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 20px;
+  margin: 28px 0 0;
+}
+
+.card { border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; }
+.card-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+
+.word-of-day { cursor: pointer; }
+#splitter-input { width: 100%; }
+.word-of-day__word {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.2;
+  white-space: pre;
+}
+
+/* Colored token blocks used by the splitter, game, and saved list */
+.chips { margin: 10px 0 0; line-height: 2.1; min-height: 30px; }
+.chip {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  padding: 2px 7px;
+  margin: 2px 2px 2px 0;
+  border: 0;
+  border-radius: 5px;
+  white-space: pre;
+  color: var(--ink);
+  cursor: pointer;
+}
+.chip--a { background: var(--chip-a); }
+.chip--b { background: var(--chip-b); }
+
+/* The dot that marks a leading space, like ·the */
+.lead-space { color: var(--accent); font-weight: 400; }
+
+
+/* 6. Entry card ---------------------------------------------------- */
+.entry-card {
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin: 24px 0 8px;
+}
+.entry-card__word {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(30px, 6vw, 46px);
+  line-height: 1.15;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+}
+.entry-card__tech { font-size: 15px; margin-top: 6px; }
+.entry-card__desc { font-family: var(--font-serif); font-size: 17px; color: var(--muted); margin: 10px 0 0; }
+
+.entry-card__facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 16px;
+  margin: 16px 0 0;
+  font-size: 15px;
+}
+.entry-card__facts dt { color: var(--muted); }
+.entry-card__facts dd { margin: 0; overflow-wrap: anywhere; }
+
+.entry-card__actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 0; }
+.entry-card__copybox { margin-top: 12px; }
+.entry-card__copybox input { width: 100%; }
+
+/* Text-style buttons used for neighbor words */
+.link-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin-right: 12px;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* "\ F0 9F 98 \" style technical forms */
+.tech { font-family: var(--font-sans); font-weight: 400; font-size: 13px; color: var(--muted); }
+
+
+/* 7. Word list ----------------------------------------------------- */
+/* Guide words at the top of each page, like a printed dictionary */
+.guide-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 18px 0 10px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-serif);
+  font-size: 17px;
+}
+.guide-bar__words { font-weight: 700; white-space: pre; overflow: hidden; text-overflow: ellipsis; }
+.guide-bar__page { font-family: var(--font-sans); font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+.word-columns {
+  columns: 3 280px;
+  column-gap: 44px;
+  column-rule: 1px solid var(--rule);
+  margin-top: 12px;
+}
+
+/* Big letter at the start of each section ("A", "B", ...) */
+.section-letter {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  line-height: 1;
+  margin: 22px 0 8px;
+  column-span: all;
+}
+
+/* One dictionary row: word on the left, type and ID on the right */
+.row {
+  break-inside: avoid;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px dotted var(--rule);
+  cursor: pointer;
+}
+.row:hover .row__word { color: var(--accent); }
+
+.row__word {
+  flex: 1 1 0;
+  min-width: 0;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 18px;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;   /* long words end in "…" */
+}
+.row__word.is-cut { cursor: zoom-in; }
+.row__word.is-expanded { white-space: pre-wrap; overflow-wrap: anywhere; text-overflow: clip; }
+/* Labeled entries (byte fragments, special tokens) wrap instead of cutting off */
+.row__word--labeled { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+
+.row__meta { display: flex; gap: 10px; align-items: baseline; white-space: nowrap; flex: none; }
+.row__gloss { width: 100%; font-family: var(--font-serif); font-size: 15px; color: var(--muted); margin-top: 2px; }
+
+.kind { font-family: var(--font-serif); font-style: italic; font-size: 14px; color: var(--muted); }
+.token-id { font-variant-numeric: tabular-nums; font-size: 15px; font-weight: 500; }
+
+.empty-msg { padding: 40px 0; color: var(--muted); font-family: var(--font-serif); font-size: 18px; }
+
+
+/* 8. Pager: « ‹ 1 2 3 › » ----------------------------------------- */
+.pager { display: flex; justify-content: center; margin: 28px 0 0; }
+.pager__group, .pager__nums { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; }
+.pager button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 7px 8px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pager .pager__jump { font-size: 16px; }
+.pager button[aria-current="page"] { background: var(--tab-on); color: var(--tab-on-text); border-color: var(--tab-on); }
+.pager button:disabled { opacity: 0.4; cursor: default; }
+
+
+/* 9. Letter index -------------------------------------------------
+   On desktop it sticks to the right edge and stretches to the
+   window height, like the A-Z scroller on a phone's contact list. */
+.letter-index {
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  height: clamp(420px, calc(100vh - 32px), 760px);
+  padding: 2px 0 2px 6px;
+  border-left: 1px solid var(--rule);
+}
+.letter-index button {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  padding: 0;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  line-height: 1;
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.letter-index button:hover { color: var(--ink); background: var(--tab); }
+.letter-index button.is-current { background: var(--tab-on); color: var(--tab-on-text); }
+.letter-index button.is-word { font-family: var(--font-sans); font-size: 11px; }
+
+
+/* 10. Tab views ----------------------------------------------------
+   Each part of the page says which tab it belongs to with
+   data-view="...". Only the active tab's parts are shown. */
+body:not([data-active-view="dictionary"]) [data-view="dictionary"],
+body:not([data-active-view="play"]) [data-view="play"],
+body:not([data-active-view="facts"]) [data-view="facts"],
+body:not([data-active-view="saved"]) [data-view="saved"] { display: none !important; }
+
+/* The letter index only exists on the dictionary tab */
+body:not([data-active-view="dictionary"]) .page { grid-template-columns: minmax(0, 1fr); }
+
+.view-title { font-family: var(--font-serif); font-weight: 400; font-size: clamp(28px, 4vw, 36px); margin: 8px 0 4px; }
+.view-subtitle { color: var(--muted); margin: 0 0 18px; }
+
+/* Guessing game */
+.game__scores { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.game__scores .note { margin: 0; }
+.game__best { color: var(--ink); }
+.game__word {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(30px, 7vw, 48px);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  margin: 6px 0 16px;
+}
+.game__choices { display: flex; gap: 8px; flex-wrap: wrap; }
+.game__choices button,
+.game__next {
+  font-size: 16px;
+  min-width: 56px;
+  min-height: 48px;
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.game__choices button.is-right { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.game__choices button.is-wrong { text-decoration: line-through; opacity: 0.5; }
+.game__result { margin: 14px 0 0; min-height: 24px; }
+.game__result p { margin: 0 0 8px; }
+.game__next { padding: 0 18px; margin-top: 12px; }
+
+/* Fun facts */
+.fact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.fact { border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; }
+.fact__word {
+  display: block;
+  padding: 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.fact__text { margin: 6px 0 0; color: var(--muted); font-size: 15px; }
+
+/* Bar chart of token types */
+.chart-card { margin-top: 14px; }
+.chart { display: grid; gap: 8px; margin: 18px 0 0; }
+.chart__row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: 14px; }
+.chart__track { height: 14px; background: var(--tab); border-radius: 4px; overflow: hidden; }
+.chart__fill { height: 100%; background: var(--accent); }
+.chart__num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Saved words */
+.saved-list { display: flex; flex-wrap: wrap; gap: 6px; }
+
+
+/* 11. Footer ------------------------------------------------------- */
+.site-footer {
+  grid-column: 1;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: balance;
+}
+.site-footer p { margin: 0; }
+.site-footer__updated { margin-top: 10px !important; font-size: 13px; }
+.site-footer__credit { margin-top: 6px !important; font-size: 12px; }
+.site-footer__credit a { color: inherit; }
+
+.author-link { display: inline-block; margin-top: 12px; font-size: 14px; color: inherit; text-decoration: none; }
+.author-link:hover,
+.author-link:focus-visible { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+
+/* 12. Accessibility helpers --------------------------------------- */
+/* Text only screen readers can hear */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+
+/* 13. Phones and small screens ------------------------------------ */
+@media (max-width: 720px) {
+  .page { grid-template-columns: minmax(0, 1fr); padding: 28px 16px 48px; }
+
+  .title-row { flex-direction: column; align-items: stretch; }
+  .tabs { width: 100%; }
+  .tab { flex: 1; flex-direction: column; gap: 3px; font-size: 12px; padding: 6px 4px; min-height: 52px; }
+
+  .definition { font-size: 16px; }
+  .intro { font-size: 15px; }
+
+  .sort-toggle { width: 100%; }
+  .sort-toggle button { flex: 1; min-height: 44px; }
+  input[type="search"] { width: 100%; min-height: 44px; font-size: 16px; }
+  .entry-count { margin-left: 0; width: 100%; }
+
+  .feature-cards { grid-template-columns: minmax(0, 1fr); }
+  .entry-card { padding: 16px; }
+
+  .guide-bar { flex-wrap: wrap; font-size: 16px; }
+  .guide-bar__words { white-space: normal; word-break: break-word; }
+  .section-letter { font-size: 36px; }
+  .row { padding: 8px 0; }
+  .row__word { font-size: 17px; }
+  .kind { font-size: 13px; }
+
+  /* Letter index becomes a swipeable row above the list */
+  .letter-index {
+    position: static;
+    order: -1;
+    grid-row: 2;
+    flex-direction: row;
+    gap: 4px;
+    height: auto;
+    padding: 0 0 4px;
+    border-left: 0;
+    overflow-x: auto;
+  }
+  .letter-index button {
+    flex: none;
+    width: auto;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 6px 10px;
+    background: var(--tab);
+    color: var(--ink);
+  }
+
+  .pager button { min-width: 40px; }
+  .chart__row { grid-template-columns: 110px minmax(0, 1fr) 60px; }
+}
+
+@media (max-width: 420px) {
+  .pager__group, .pager__nums { gap: 4px; }
+  .pager button { min-width: 34px; padding: 7px 3px; }
+}
+
+@media (max-width: 380px) {
+  .kind { display: none; }
+}

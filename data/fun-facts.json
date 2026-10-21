@@ -1,0 +1,8 @@
+[
+  { "id": 58040, "title": "128 spaces", "text": "The longest token is 128 spaces in a row. Code is full of indentation, so the model learned a single piece for it." },
+  { "id": 61207, "text": "The longest word-like token comes from iPhone app code. The model has read that much programming." },
+  { "id": 68612, "text": "The whole alphabet, in order, is just one token. So is the uppercase version." },
+  { "id": 471, "text": "·return, a coding word, got number 471. ·pizza is all the way at 23,317. Lower numbers usually mean the piece showed up more often in training." },
+  { "id": 41330, "text": "·Minecraft, ·Bitcoin, and ·Hogwarts each got their own entry. But “TikTok” and “ChatGPT” didn’t, so they get built from smaller pieces." },
+  { "id": 0, "text": "Entry number zero is just an exclamation point. Every number from 0 to 999 also has its own entry." }
+]

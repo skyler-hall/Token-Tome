@@ -1,0 +1,13 @@
+# Installed tools (recreate with: npm install)
+node_modules/
+
+# Single-file build output (recreate with: npm run build:single)
+dist/
+
+# Never commit secrets
+.env
+.env.*
+
+# OS clutter
+.DS_Store
+Thumbs.db

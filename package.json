@@ -1,0 +1,17 @@
+{
+  "name": "token-tome",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Webster-style dictionary of every token an AI model reads.",
+  "type": "module",
+  "scripts": {
+    "start": "npx serve .",
+    "build:data": "node scripts/build-vocab.mjs && python3 scripts/label-invisible.py",
+    "build:game": "node scripts/build-game-words.mjs",
+    "build:single": "node scripts/bundle-single-file.mjs"
+  },
+  "devDependencies": {
+    "llama3-tokenizer-js": "1.2.0",
+    "esbuild": "0.24.0"
+  }
+}

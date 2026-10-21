@@ -1,0 +1,20 @@
+# Netlify settings for Token Tome
+# There is no build step: Netlify serves the files as they are.
+
+[build]
+  publish = "."
+  command = ""
+
+# Basic security headers for every page
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# The token data rarely changes, so browsers can keep it for a day
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
